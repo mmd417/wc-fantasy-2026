@@ -156,6 +156,10 @@
   }
   .draft-team-chip:hover { background: #1a4535; border-color: #2a6040; }
   .draft-team-chip.dragging { opacity: 0.35; }
+  .draft-team-chip.tap-selected { border-color: #f0c040; background: #1f4a28; box-shadow: 0 0 0 2px #f0c04055; }
+  .pool-chip.tap-selected { border-color: #f0c040; background: #1f4a28; box-shadow: 0 0 0 2px #f0c04055; }
+  .draft-player-col.tap-target { border-color: #f0c040 !important; background: #152a1a; cursor: pointer; }
+  .pool-grid.tap-target { border-color: #6aaa88 !important; cursor: pointer; }
   .draft-team-chip .chip-remove {
     color: #3a5540; font-size: 0.7rem; cursor: pointer; padding: 0 2px; margin-left: 4px;
     transition: color 0.1s;
@@ -1072,6 +1076,34 @@ function oddsLabel(team) {
 // ═══════════════════════════════════════════════════════════════
 let dragState = null;
 
+// ── TAP-TO-SELECT (mobile) ───────────────────────────────────
+let tapSelected = null; // { team, fromPlayer } or null
+
+function tapSelectTeam(e, team, fromPlayer) {
+  if (isDraftLocked()) return;
+  e.stopPropagation();
+  tapSelected = (tapSelected && tapSelected.team === team && tapSelected.fromPlayer === fromPlayer)
+    ? null : { team, fromPlayer };
+  renderManage();
+}
+function tapAssignToPlayer(pi) {
+  if (isDraftLocked() || !tapSelected) return;
+  const { team, fromPlayer } = tapSelected; tapSelected = null;
+  if (fromPlayer >= 0)
+    state.players[fromPlayer].teams = state.players[fromPlayer].teams.filter(t => normalize(t) !== normalize(team));
+  if (!state.players[pi].teams.some(t => normalize(t) === normalize(team)))
+    state.players[pi].teams.push(team);
+  saveData(); renderAll();
+}
+function tapReturnToPool() {
+  if (isDraftLocked() || !tapSelected) return;
+  const { team, fromPlayer } = tapSelected; tapSelected = null;
+  if (fromPlayer >= 0) {
+    state.players[fromPlayer].teams = state.players[fromPlayer].teams.filter(t => normalize(t) !== normalize(team));
+    saveData(); renderAll();
+  } else { renderManage(); }
+}
+
 function toggleDraftLock() {
   if (!sessionEditMode) return;
   state.locked = !state.locked;
@@ -1113,7 +1145,9 @@ function renderManage() {
     tipHtml = '🔒 <strong style="color:#f0c040">Draft is locked.</strong> Teams are set — click Unlock Draft to make changes.';
     tipStyle = 'border-color:#f0c040;background:#1a2a18';
   } else {
-    tipHtml = 'Drag countries onto a player\'s column to assign them. Drag back to the pool to unassign. Lock when your draft is final.';
+    tipHtml = tapSelected
+      ? `✅ <strong style="color:#f0c040">${tapSelected.team}</strong> selected — tap a player column to assign, or tap the pool to return it. Tap the team again to deselect.`
+      : 'Tap a team to select it, then tap a player column to assign. On desktop you can also drag and drop. Lock when your draft is final.';
   }
 
   // ── Settings pills ──────────────────────────────────────────
@@ -1136,16 +1170,19 @@ function renderManage() {
   // ── Player columns ──────────────────────────────────────────
   const colsHtml = state.players.map((p,pi) => {
     const picks = p.teams.filter(t=>t);
-    const chipsHtml = picks.map(t => `
-      <div class="draft-team-chip" ${locked?'':'draggable="true"'}
-        ${locked?'':`ondragstart="onChipDragStart(event,'${t.replace(/'/g,"\\'")}',${pi})" ondragend="onDragEnd(event)"`}
-        style="${locked?'cursor:default':''}">
+    const chipsHtml = picks.map(t => {
+      const isTapSel = tapSelected && tapSelected.team === t && tapSelected.fromPlayer === pi;
+      const ts = t.replace(/'/g,"\\'");
+      return `
+      <div class="draft-team-chip${isTapSel?' tap-selected':''}" ${locked?'':'draggable="true"'}
+        ${locked?'':`ondragstart="onChipDragStart(event,'${ts}',${pi})" ondragend="onDragEnd(event)" onclick="tapSelectTeam(event,'${ts}',${pi})"`}
+        style="${locked?'cursor:default':'cursor:pointer'}">
         <span>${t}</span>
-        ${locked?'':`<span class="chip-remove" onclick="removeTeamFromPlayer(${pi},'${t.replace(/'/g,"\\'")}')">✕</span>`}
-      </div>`).join('');
+        ${locked?'':`<span class="chip-remove" onclick="event.stopPropagation();removeTeamFromPlayer(${pi},'${ts}')">✕</span>`}
+      </div>`;}).join('');
     return `
-      <div class="draft-player-col" id="player-col-${pi}"
-        ${locked?'':`ondragover="onColDragOver(event,${pi})" ondragleave="onColDragLeave(event,${pi})" ondrop="onColDrop(event,${pi})"`}>
+      <div class="draft-player-col${tapSelected&&!locked?' tap-target':''}" id="player-col-${pi}"
+        ${locked?'':`ondragover="onColDragOver(event,${pi})" ondragleave="onColDragLeave(event,${pi})" ondrop="onColDrop(event,${pi})" onclick="tapAssignToPlayer(${pi})"`}>
         <div class="draft-player-header" style="background:${p.color}22; border-color:${p.color}55">
           <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${p.color};flex-shrink:0"></span>
           <span style="font-weight:700;font-size:0.88rem;color:${p.color}">${p.name}</span>
@@ -1161,14 +1198,17 @@ function renderManage() {
   // ── Pool ────────────────────────────────────────────────────
   const emptyMsg = `<span style="color:#3a5540;font-size:0.82rem">All teams drafted!</span>`;
   const poolHtml = unselected.length === 0 ? emptyMsg :
-    unselected.map(t => locked
-      ? `<div class="pool-chip" style="cursor:default;opacity:0.5"><span>${t}</span><span class="pool-odds">${oddsLabel(t)}</span></div>`
-      : `<div class="pool-chip" draggable="true"
-           ondragstart="onPoolDragStart(event,'${t.replace(/'/g,"\\'")}' )"
-           ondragend="onDragEnd(event)">
-           <span>${t}</span><span class="pool-odds">${oddsLabel(t)}</span>
-         </div>`
-    ).join('');
+    unselected.map(t => {
+      const isTapSel = tapSelected && tapSelected.team === t && tapSelected.fromPlayer === -1;
+      const ts = t.replace(/'/g,"\\'");
+      return locked
+        ? `<div class="pool-chip" style="cursor:default;opacity:0.5"><span>${t}</span><span class="pool-odds">${oddsLabel(t)}</span></div>`
+        : `<div class="pool-chip${isTapSel?' tap-selected':''}" draggable="true"
+             ondragstart="onPoolDragStart(event,'${ts}')" ondragend="onDragEnd(event)"
+             onclick="tapSelectTeam(event,'${ts}',-1)">
+             <span>${t}</span><span class="pool-odds">${oddsLabel(t)}</span>
+           </div>`;
+    }).join('');
 
   document.getElementById('page-manage').innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px">
@@ -1185,8 +1225,8 @@ function renderManage() {
         <h2 class="section-title" style="margin:0">Unselected (${unselected.length})</h2>
         <span style="font-size:0.75rem;color:#6aaa88">sorted by win odds</span>
       </div>
-      <div class="pool-grid" id="pool-grid"
-        ${locked?'':`ondragover="onPoolDragOver(event)" ondragleave="onPoolDragLeave(event)" ondrop="onPoolDrop(event)"`}>
+      <div class="pool-grid${tapSelected&&tapSelected.fromPlayer>=0&&!locked?' tap-target':''}" id="pool-grid"
+        ${locked?'':`ondragover="onPoolDragOver(event)" ondragleave="onPoolDragLeave(event)" ondrop="onPoolDrop(event)" onclick="tapReturnToPool()"`}>
         ${poolHtml}
       </div>
     </div>`;
