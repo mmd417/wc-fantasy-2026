@@ -625,9 +625,7 @@ function updateHeaderUI() {
 // INIT
 // ═══════════════════════════════════════════════════════════════
 async function init() {
-  if (window.WC_LAST_UPDATED) {
-    document.getElementById('last-updated-label').textContent = '🔄 ' + window.WC_LAST_UPDATED;
-  }
+  updateTimestampLabel();
 
   if (!SUPABASE_CONFIGURED) {
     // ── LOCAL MODE (no Supabase) ─────────────────────────────────
@@ -1323,6 +1321,35 @@ function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ── TIMESTAMP ─────────────────────────────────────────────────
+function updateTimestampLabel() {
+  const el = document.getElementById('last-updated-label');
+  if (!el) return;
+
+  const iso = window.WC_LAST_VERIFIED_AT;
+  if (!iso) {
+    // No timestamp yet — show static label
+    el.innerHTML = window.WC_LAST_UPDATED
+      ? `<span style="color:#6aaa88">🔄 ${window.WC_LAST_UPDATED}</span>`
+      : '';
+    return;
+  }
+
+  const updated = new Date(iso);
+  const now = new Date();
+  const hoursAgo = (now - updated) / 36e5;
+
+  let timeStr;
+  if (hoursAgo < 1)        timeStr = 'just now';
+  else if (hoursAgo < 24)  timeStr = `${Math.floor(hoursAgo)}h ago`;
+  else                     timeStr = `${Math.floor(hoursAgo/24)}d ago`;
+
+  const stale = hoursAgo > 36;
+  el.innerHTML = stale
+    ? `<span style="color:#e07070" title="Last updated ${updated.toLocaleString()}">⚠️ Scores may be delayed · updated ${timeStr}</span>`
+    : `<span style="color:#6aaa88" title="Last updated ${updated.toLocaleString()}">✅ Updated ${timeStr}</span>`;
 }
 
 // ── START ──────────────────────────────────────────────────────
