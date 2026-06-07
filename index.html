@@ -200,10 +200,13 @@
   /* ── OVERLAY / MODAL ── */
   .overlay {
     position: fixed; inset: 0; background: rgba(5,12,25,0.93);
-    display: flex; align-items: center; justify-content: center;
+    display: flex; align-items: flex-start; justify-content: center;
     z-index: 2000; backdrop-filter: blur(4px);
+    overflow-y: auto; padding: 40px 16px 60px;
   }
+  .overlay.landing { background: rgba(5,20,10,0.72); backdrop-filter: blur(2px); }
   .overlay.hidden { display: none; }
+  .landing-stack { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 480px; }
   .modal {
     background: #0f3020; border: 1px solid #2a6040; border-radius: 14px;
     padding: 30px 28px; max-width: 440px; width: 92%;
@@ -236,7 +239,9 @@
 
 <!-- Modal overlay -->
 <div id="overlay" class="overlay hidden">
-  <div id="modal-content" class="modal"></div>
+  <div id="overlay-inner">
+    <div id="modal-content" class="modal"></div>
+  </div>
 </div>
 
 <header>
@@ -436,7 +441,13 @@ function showOverlay(html) {
   document.getElementById('overlay').classList.remove('hidden');
 }
 function hideOverlay() {
-  document.getElementById('overlay').classList.add('hidden');
+  const overlay = document.getElementById('overlay');
+  overlay.classList.add('hidden');
+  overlay.classList.remove('landing');
+  const inner = document.getElementById('overlay-inner');
+  inner.className = '';
+  const how = document.getElementById('landing-how');
+  if (how) how.remove();
 }
 function showLoadingOverlay(msg) {
   showOverlay(`<div style="text-align:center;padding:20px">
@@ -452,8 +463,11 @@ function showErrorOverlay(title, msg, showCreate) {
   `);
 }
 
-function showCreateLeagueOverlay() {
-  showOverlay(`
+function showCreateLeagueOverlay(isLanding = false) {
+  const overlay = document.getElementById('overlay');
+  const inner   = document.getElementById('overlay-inner');
+
+  document.getElementById('modal-content').innerHTML = `
     <h2>⚽ Create Your League</h2>
     <p>Set a name and edit PIN for your league. Share the link with friends — they can view freely but need the PIN to make changes.</p>
     <input class="modal-input" id="cl-name" placeholder="League name (e.g. Work Cup 2026)" maxlength="60"
@@ -466,7 +480,26 @@ function showCreateLeagueOverlay() {
     <button class="btn btn-primary" onclick="submitCreateLeague()" style="width:100%;padding:11px">
       Create League &amp; Get Your Link →
     </button>
-  `);
+  `;
+
+  if (isLanding) {
+    overlay.classList.add('landing');
+    inner.className = 'landing-stack';
+    // Append How It Works below the modal if not already there
+    if (!document.getElementById('landing-how')) {
+      const howEl = document.createElement('div');
+      howEl.id = 'landing-how';
+      howEl.innerHTML = renderWelcome();
+      inner.appendChild(howEl);
+    }
+  } else {
+    overlay.classList.remove('landing');
+    inner.className = '';
+    const existing = document.getElementById('landing-how');
+    if (existing) existing.remove();
+  }
+
+  overlay.classList.remove('hidden');
   setTimeout(() => document.getElementById('cl-name')?.focus(), 50);
 }
 
@@ -614,7 +647,7 @@ async function init() {
 
   if (!id) {
     showBgVideo();
-    showCreateLeagueOverlay();
+    showCreateLeagueOverlay(true);
     return;
   }
 
