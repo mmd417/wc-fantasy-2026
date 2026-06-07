@@ -6,192 +6,192 @@
 <title>World Cup Fantasy Draft 2026</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: #0a1628; color: #e8eaf0; min-height: 100vh; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #0d2b1a; color: #e8f0ec; min-height: 100vh; }
 
   header {
-    background: linear-gradient(135deg, #1a3a5c, #0d2137);
+    background: linear-gradient(135deg, #1a4a2e, #0a2015);
     padding: 16px 24px; display: flex; align-items: center; gap: 14px;
-    border-bottom: 2px solid #c8a84b; flex-wrap: wrap;
+    border-bottom: 2px solid #f0c040; flex-wrap: wrap;
   }
-  header h1 { font-size: 1.4rem; font-weight: 700; color: #c8a84b; letter-spacing: 1px; }
-  .last-updated { font-size: 0.75rem; color: #6a8aaa; }
+  header h1 { font-size: 1.4rem; font-weight: 700; color: #f0c040; letter-spacing: 1px; }
+  .last-updated { font-size: 0.75rem; color: #6aaa88; }
 
-  nav { background: #0d1f35; display: flex; gap: 0; border-bottom: 1px solid #1e3555; overflow-x: auto; }
+  nav { background: #0f3020; display: flex; gap: 0; border-bottom: 1px solid #1e5535; overflow-x: auto; }
   nav button {
-    background: none; border: none; color: #8aa3be;
+    background: none; border: none; color: #7aaa90;
     padding: 13px 20px; cursor: pointer; font-size: 0.88rem; font-weight: 500;
     border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap;
   }
-  nav button:hover { color: #c8a84b; }
-  nav button.active { color: #c8a84b; border-bottom-color: #c8a84b; background: rgba(200,168,75,0.06); }
+  nav button:hover { color: #f0c040; }
+  nav button.active { color: #f0c040; border-bottom-color: #f0c040; background: rgba(200,168,75,0.06); }
 
   .page { display: none; padding: 20px; max-width: 1300px; margin: 0 auto; }
   .page.active { display: block; }
 
-  .section-title { font-size: 0.9rem; font-weight: 700; color: #c8a84b; margin-bottom: 14px; letter-spacing: 1px; text-transform: uppercase; }
-  .tip { background: #132840; border-left: 3px solid #c8a84b; padding: 9px 13px; border-radius: 0 6px 6px 0; font-size: 0.8rem; color: #8aa3be; margin-bottom: 14px; }
+  .section-title { font-size: 0.9rem; font-weight: 700; color: #f0c040; margin-bottom: 14px; letter-spacing: 1px; text-transform: uppercase; }
+  .tip { background: #112a18; border-left: 3px solid #f0c040; padding: 9px 13px; border-radius: 0 6px 6px 0; font-size: 0.8rem; color: #7aaa90; margin-bottom: 14px; }
 
   /* ── LEADERBOARD ── */
-  .standings-table { width: 100%; border-collapse: collapse; background: #0d1f35; border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
-  .standings-table th { background: #1a3a5c; padding: 9px 13px; text-align: left; font-size: 0.77rem; text-transform: uppercase; letter-spacing: 0.5px; color: #8aa3be; }
-  .standings-table td { padding: 9px 13px; border-bottom: 1px solid #132840; font-size: 0.88rem; }
+  .standings-table { width: 100%; border-collapse: collapse; background: #0f3020; border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+  .standings-table th { background: #1a4a2e; padding: 9px 13px; text-align: left; font-size: 0.77rem; text-transform: uppercase; letter-spacing: 0.5px; color: #7aaa90; }
+  .standings-table td { padding: 9px 13px; border-bottom: 1px solid #112a18; font-size: 0.88rem; }
   .standings-table tr:last-child td { border-bottom: none; }
-  .standings-table tr:hover td { background: #102233; }
+  .standings-table tr:hover td { background: #0d2218; }
   .rank-badge { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
-  .rank-1 { background: #c8a84b; color: #000; }
-  .rank-2 { background: #8aa3be; color: #000; }
+  .rank-1 { background: #f0c040; color: #000; }
+  .rank-2 { background: #7aaa90; color: #000; }
   .rank-3 { background: #a0654a; color: #fff; }
-  .rank-other { background: #1e3555; color: #8aa3be; }
+  .rank-other { background: #1e5535; color: #7aaa90; }
 
   .leaderboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
-  .player-card { background: #0d1f35; border-radius: 10px; overflow: hidden; border: 1px solid #1e3555; }
+  .player-card { background: #0f3020; border-radius: 10px; overflow: hidden; border: 1px solid #1e5535; }
   .player-card-header { padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
   .player-name { font-weight: 700; font-size: 0.95rem; }
-  .player-points { font-size: 1.5rem; font-weight: 800; color: #c8a84b; }
-  .player-pts-label { font-size: 0.68rem; color: #6a8aaa; text-transform: uppercase; }
+  .player-points { font-size: 1.5rem; font-weight: 800; color: #f0c040; }
+  .player-pts-label { font-size: 0.68rem; color: #6aaa88; text-transform: uppercase; }
   .player-teams-list { padding: 0 14px 10px; }
-  .team-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 0.8rem; border-bottom: 1px solid #132840; }
+  .team-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 0.8rem; border-bottom: 1px solid #112a18; }
   .team-row:last-child { border-bottom: none; }
   .team-pts { font-weight: 600; color: #7ec8a4; font-size: 0.78rem; }
-  .team-pts.zero { color: #445566; }
+  .team-pts.zero { color: #3a5540; }
 
   /* ── DRAFT BOARD ── */
   .draft-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
-  .draft-col { background: #0d1f35; border-radius: 10px; overflow: hidden; border: 1px solid #1e3555; }
+  .draft-col { background: #0f3020; border-radius: 10px; overflow: hidden; border: 1px solid #1e5535; }
   .draft-col-header { padding: 9px 13px; font-weight: 700; font-size: 0.9rem; text-align: center; }
-  .draft-pick { padding: 5px 12px; font-size: 0.82rem; display: flex; gap: 6px; align-items: center; border-top: 1px solid #132840; }
-  .pick-num { color: #445566; width: 14px; font-size: 0.72rem; }
+  .draft-pick { padding: 5px 12px; font-size: 0.82rem; display: flex; gap: 6px; align-items: center; border-top: 1px solid #112a18; }
+  .pick-num { color: #3a5540; width: 14px; font-size: 0.72rem; }
   .pick-pts { font-size: 0.72rem; font-weight: 600; color: #7ec8a4; }
-  .pick-pts.zero { color: #445566; }
+  .pick-pts.zero { color: #3a5540; }
 
   /* ── MATCH ENTRY ── */
-  .match-form { background: #0d1f35; border-radius: 10px; padding: 18px; border: 1px solid #1e3555; margin-bottom: 18px; }
+  .match-form { background: #0f3020; border-radius: 10px; padding: 18px; border: 1px solid #1e5535; margin-bottom: 18px; }
   .form-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 10px; }
   .form-group { display: flex; flex-direction: column; gap: 4px; }
-  .form-group label { font-size: 0.75rem; color: #8aa3be; text-transform: uppercase; letter-spacing: 0.5px; }
-  .form-group select, .form-group input { background: #132840; border: 1px solid #1e3555; color: #e8eaf0; padding: 7px 10px; border-radius: 6px; font-size: 0.88rem; min-width: 130px; }
-  .form-group select:focus, .form-group input:focus { outline: none; border-color: #c8a84b; }
+  .form-group label { font-size: 0.75rem; color: #7aaa90; text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-group select, .form-group input { background: #112a18; border: 1px solid #1e5535; color: #e8f0ec; padding: 7px 10px; border-radius: 6px; font-size: 0.88rem; min-width: 130px; }
+  .form-group select:focus, .form-group input:focus { outline: none; border-color: #f0c040; }
   .score-inputs { display: flex; align-items: center; gap: 7px; }
   .score-inputs input { width: 55px; text-align: center; }
-  .score-sep { color: #445566; font-weight: 700; }
+  .score-sep { color: #3a5540; font-weight: 700; }
   .btn { padding: 8px 18px; border-radius: 6px; border: none; cursor: pointer; font-size: 0.88rem; font-weight: 600; transition: all 0.15s; }
-  .btn-primary { background: #c8a84b; color: #000; }
+  .btn-primary { background: #f0c040; color: #000; }
   .btn-primary:hover { background: #dab94f; }
   .btn-danger { background: #3a1515; color: #e07070; border: 1px solid #5a2020; font-size: 0.78rem; padding: 4px 9px; }
   .btn-danger:hover { background: #4a1e1e; }
   .results-list { display: flex; flex-direction: column; gap: 7px; }
-  .result-item { background: #0d1f35; border: 1px solid #1e3555; border-radius: 8px; padding: 9px 14px; display: flex; justify-content: space-between; align-items: center; }
-  .result-score { font-weight: 700; color: #c8a84b; margin: 0 10px; }
-  .result-stage { font-size: 0.72rem; color: #6a8aaa; background: #1a3a5c; padding: 2px 7px; border-radius: 4px; }
+  .result-item { background: #0f3020; border: 1px solid #1e5535; border-radius: 8px; padding: 9px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .result-score { font-weight: 700; color: #f0c040; margin: 0 10px; }
+  .result-stage { font-size: 0.72rem; color: #6aaa88; background: #1a4a2e; padding: 2px 7px; border-radius: 4px; }
   .result-pts { font-size: 0.75rem; color: #7ec8a4; margin-left: 6px; }
   .result-source { font-size: 0.68rem; color: #3a6a4a; background: #0d2418; padding: 1px 5px; border-radius: 3px; margin-left: 5px; }
   .stage-tabs { display: flex; gap: 7px; margin-bottom: 14px; flex-wrap: wrap; }
-  .stage-tab { padding: 5px 12px; border-radius: 20px; border: 1px solid #1e3555; background: #0d1f35; color: #8aa3be; cursor: pointer; font-size: 0.8rem; transition: all 0.15s; }
-  .stage-tab.active { background: #1a3a5c; border-color: #c8a84b; color: #c8a84b; }
-  .empty-state { text-align: center; padding: 28px; color: #445566; font-size: 0.88rem; }
+  .stage-tab { padding: 5px 12px; border-radius: 20px; border: 1px solid #1e5535; background: #0f3020; color: #7aaa90; cursor: pointer; font-size: 0.8rem; transition: all 0.15s; }
+  .stage-tab.active { background: #1a4a2e; border-color: #f0c040; color: #f0c040; }
+  .empty-state { text-align: center; padding: 28px; color: #3a5540; font-size: 0.88rem; }
 
   /* ── GROUP TABLES ── */
   .groups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  .group-card { background: #0d1f35; border-radius: 10px; overflow: hidden; border: 1px solid #1e3555; }
-  .group-card-header { background: #1a3a5c; padding: 8px 14px; font-weight: 700; font-size: 0.88rem; color: #c8a84b; letter-spacing: 1px; }
+  .group-card { background: #0f3020; border-radius: 10px; overflow: hidden; border: 1px solid #1e5535; }
+  .group-card-header { background: #1a4a2e; padding: 8px 14px; font-weight: 700; font-size: 0.88rem; color: #f0c040; letter-spacing: 1px; }
   .group-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-  .group-table th { padding: 5px 8px; text-align: right; color: #6a8aaa; font-weight: 600; font-size: 0.7rem; }
+  .group-table th { padding: 5px 8px; text-align: right; color: #6aaa88; font-weight: 600; font-size: 0.7rem; }
   .group-table th:first-child { text-align: left; }
-  .group-table td { padding: 6px 8px; text-align: right; border-top: 1px solid #132840; }
+  .group-table td { padding: 6px 8px; text-align: right; border-top: 1px solid #112a18; }
   .group-table td:first-child { text-align: left; font-weight: 500; }
   .group-table tr.qualified td { color: #7ec8a4; }
   .group-table tr.qualified td:first-child::after { content: ' ✓'; font-size: 0.65rem; color: #7ec8a4; }
-  .group-table tr.maybe-qualified td { color: #c8a84b; }
-  .group-pts { font-weight: 700; color: #e8eaf0; }
+  .group-table tr.maybe-qualified td { color: #f0c040; }
+  .group-pts { font-weight: 700; color: #e8f0ec; }
   .team-owner-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
 
   /* ── BRACKET ── */
   .bracket-container { overflow-x: auto; padding-bottom: 10px; }
   .bracket { display: flex; gap: 0; min-width: 900px; }
   .bracket-round { display: flex; flex-direction: column; flex: 1; min-width: 140px; }
-  .round-header { text-align: center; padding: 8px; font-size: 0.72rem; font-weight: 700; color: #8aa3be; text-transform: uppercase; letter-spacing: 0.5px; background: #0d1f35; border-bottom: 1px solid #1e3555; margin-bottom: 4px; }
+  .round-header { text-align: center; padding: 8px; font-size: 0.72rem; font-weight: 700; color: #7aaa90; text-transform: uppercase; letter-spacing: 0.5px; background: #0f3020; border-bottom: 1px solid #1e5535; margin-bottom: 4px; }
   .bracket-slots { display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding: 4px 3px; gap: 4px; }
-  .bracket-match { background: #0d1f35; border: 1px solid #1e3555; border-radius: 6px; overflow: hidden; }
-  .bracket-team { padding: 5px 8px; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #132840; }
+  .bracket-match { background: #0f3020; border: 1px solid #1e5535; border-radius: 6px; overflow: hidden; }
+  .bracket-team { padding: 5px 8px; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #112a18; }
   .bracket-team:last-child { border-bottom: none; }
   .bracket-team.winner { background: rgba(126,200,164,0.1); color: #7ec8a4; font-weight: 600; }
-  .bracket-team.tbd { color: #334455; font-style: italic; }
-  .bracket-team-pts { font-size: 0.68rem; color: #c8a84b; }
+  .bracket-team.tbd { color: #2a4535; font-style: italic; }
+  .bracket-team-pts { font-size: 0.68rem; color: #f0c040; }
   .bracket-separator { display: flex; align-items: center; justify-content: center; padding: 2px 0; }
 
   /* ── MANAGE ── */
   .players-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; }
-  .player-edit-card { background: #0d1f35; border-radius: 10px; padding: 14px; border: 1px solid #1e3555; }
+  .player-edit-card { background: #0f3020; border-radius: 10px; padding: 14px; border: 1px solid #1e5535; }
   .player-edit-header { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
-  .player-edit-header input[type=text] { flex: 1; background: #132840; border: 1px solid #1e3555; color: #e8eaf0; padding: 6px 9px; border-radius: 6px; font-weight: 700; }
-  .color-swatch { width: 30px; height: 30px; border-radius: 6px; border: 2px solid #1e3555; cursor: pointer; padding: 0; }
+  .player-edit-header input[type=text] { flex: 1; background: #112a18; border: 1px solid #1e5535; color: #e8f0ec; padding: 6px 9px; border-radius: 6px; font-weight: 700; }
+  .color-swatch { width: 30px; height: 30px; border-radius: 6px; border: 2px solid #1e5535; cursor: pointer; padding: 0; }
   .teams-edit-list { display: flex; flex-direction: column; gap: 4px; }
   .team-edit-row { display: flex; gap: 5px; }
-  .team-edit-row input { flex: 1; background: #132840; border: 1px solid #1e3555; color: #e8eaf0; padding: 4px 7px; border-radius: 5px; font-size: 0.82rem; }
-  .add-player-btn { background: #1a3a5c; border: 1px dashed #2a5080; color: #8aa3be; border-radius: 10px; padding: 14px; cursor: pointer; text-align: center; font-size: 0.88rem; transition: all 0.15s; }
-  .add-player-btn:hover { background: #1e3555; color: #c8a84b; }
+  .team-edit-row input { flex: 1; background: #112a18; border: 1px solid #1e5535; color: #e8f0ec; padding: 4px 7px; border-radius: 5px; font-size: 0.82rem; }
+  .add-player-btn { background: #1a4a2e; border: 1px dashed #2a6040; color: #7aaa90; border-radius: 10px; padding: 14px; cursor: pointer; text-align: center; font-size: 0.88rem; transition: all 0.15s; }
+  .add-player-btn:hover { background: #1e5535; color: #f0c040; }
 
   /* ── DRAFT TAB ── */
   .draft-board-wrap { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px; }
   .draft-player-col {
-    min-width: 140px; flex: 1; background: #0d1f35; border-radius: 10px;
-    border: 2px solid #1e3555; overflow: hidden; transition: border-color 0.15s;
+    min-width: 140px; flex: 1; background: #0f3020; border-radius: 10px;
+    border: 2px solid #1e5535; overflow: hidden; transition: border-color 0.15s;
   }
-  .draft-player-col.drag-over { border-color: #c8a84b; background: #132840; }
+  .draft-player-col.drag-over { border-color: #f0c040; background: #112a18; }
   .draft-player-header {
     padding: 8px 10px; display: flex; align-items: center; gap: 6px;
-    border-bottom: 2px solid #1e3555; position: relative;
+    border-bottom: 2px solid #1e5535; position: relative;
   }
   .draft-player-header input[type=text] {
     background: none; border: none; color: inherit; font-weight: 700; font-size: 0.88rem;
     width: 100%; outline: none; cursor: text;
   }
-  .draft-player-header input[type=text]:focus { border-bottom: 1px solid #c8a84b; }
+  .draft-player-header input[type=text]:focus { border-bottom: 1px solid #f0c040; }
   .draft-player-body { padding: 6px; min-height: 60px; display: flex; flex-direction: column; gap: 4px; }
   .draft-team-chip {
     display: flex; justify-content: space-between; align-items: center;
-    background: #132840; border: 1px solid #1e3555; border-radius: 5px;
+    background: #112a18; border: 1px solid #1e5535; border-radius: 5px;
     padding: 4px 7px; font-size: 0.78rem; cursor: grab; user-select: none;
     transition: background 0.12s, opacity 0.12s;
   }
-  .draft-team-chip:hover { background: #1a3555; border-color: #2a5080; }
+  .draft-team-chip:hover { background: #1a4535; border-color: #2a6040; }
   .draft-team-chip.dragging { opacity: 0.35; }
   .draft-team-chip .chip-remove {
-    color: #445566; font-size: 0.7rem; cursor: pointer; padding: 0 2px; margin-left: 4px;
+    color: #3a5540; font-size: 0.7rem; cursor: pointer; padding: 0 2px; margin-left: 4px;
     transition: color 0.1s;
   }
   .draft-team-chip .chip-remove:hover { color: #e07070; }
   .draft-drop-hint {
-    text-align: center; color: #2a4a6a; font-size: 0.72rem; padding: 8px 4px;
-    border: 1px dashed #1e3555; border-radius: 5px; margin: 2px 0;
+    text-align: center; color: #2a5a3a; font-size: 0.72rem; padding: 8px 4px;
+    border: 1px dashed #1e5535; border-radius: 5px; margin: 2px 0;
   }
   .pool-section { margin-top: 20px; }
   .pool-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   .pool-grid {
     display: flex; flex-wrap: wrap; gap: 6px;
-    background: #0d1f35; border-radius: 10px; border: 2px solid #1e3555;
+    background: #0f3020; border-radius: 10px; border: 2px solid #1e5535;
     padding: 12px; min-height: 60px; transition: border-color 0.15s;
   }
-  .pool-grid.drag-over { border-color: #6a8aaa; background: #0f2030; }
+  .pool-grid.drag-over { border-color: #6aaa88; background: #0d2b15; }
   .pool-chip {
     display: flex; align-items: center; gap: 5px;
-    background: #132840; border: 1px solid #1e3555; border-radius: 5px;
+    background: #112a18; border: 1px solid #1e5535; border-radius: 5px;
     padding: 5px 9px; font-size: 0.8rem; cursor: grab; user-select: none;
     transition: background 0.12s, opacity 0.12s;
   }
-  .pool-chip:hover { background: #1a3555; border-color: #2a5080; }
+  .pool-chip:hover { background: #1a4535; border-color: #2a6040; }
   .pool-chip.dragging { opacity: 0.35; }
-  .pool-odds { font-size: 0.68rem; color: #6a8aaa; }
+  .pool-odds { font-size: 0.68rem; color: #6aaa88; }
   .draft-player-settings { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
   .player-setting-pill {
-    display: flex; align-items: center; gap: 6px; background: #0d1f35;
-    border: 1px solid #1e3555; border-radius: 20px; padding: 5px 10px;
+    display: flex; align-items: center; gap: 6px; background: #0f3020;
+    border: 1px solid #1e5535; border-radius: 20px; padding: 5px 10px;
   }
   .player-setting-pill input[type=text] {
-    background: none; border: none; color: #e8eaf0; font-size: 0.82rem; width: 80px; outline: none;
+    background: none; border: none; color: #e8f0ec; font-size: 0.82rem; width: 80px; outline: none;
   }
   .player-setting-pill input[type=color] { width: 20px; height: 20px; border: none; border-radius: 50%; cursor: pointer; padding: 0; background: none; }
-  .player-count-badge { font-size: 0.7rem; color: #6a8aaa; margin-left: auto; padding-right: 2px; }
+  .player-count-badge { font-size: 0.7rem; color: #6aaa88; margin-left: auto; padding-right: 2px; }
 
   .toast { position: fixed; bottom: 20px; right: 20px; background: #1a5c3a; color: #7ec8a4; padding: 9px 16px; border-radius: 8px; font-size: 0.88rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 9999; }
   .toast.show { opacity: 1; }
@@ -205,28 +205,34 @@
   }
   .overlay.hidden { display: none; }
   .modal {
-    background: #0d1f35; border: 1px solid #2a5080; border-radius: 14px;
+    background: #0f3020; border: 1px solid #2a6040; border-radius: 14px;
     padding: 30px 28px; max-width: 440px; width: 92%;
     box-shadow: 0 24px 70px rgba(0,0,0,0.6);
   }
-  .modal h2 { color: #c8a84b; font-size: 1.25rem; margin-bottom: 8px; }
-  .modal p { color: #8aa3be; font-size: 0.84rem; margin-bottom: 20px; line-height: 1.55; }
+  .modal h2 { color: #f0c040; font-size: 1.25rem; margin-bottom: 8px; }
+  .modal p { color: #7aaa90; font-size: 0.84rem; margin-bottom: 20px; line-height: 1.55; }
   .modal-input {
-    width: 100%; background: #132840; border: 1px solid #1e3555; color: #e8eaf0;
+    width: 100%; background: #112a18; border: 1px solid #1e5535; color: #e8f0ec;
     padding: 10px 13px; border-radius: 8px; font-size: 0.95rem; margin-bottom: 11px; outline: none;
   }
-  .modal-input:focus { border-color: #c8a84b; }
+  .modal-input:focus { border-color: #f0c040; }
   .modal-error { color: #e07070; font-size: 0.82rem; margin-bottom: 10px; display: none; }
   .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 6px; }
   .modal-footer .btn { flex: 1; }
   .share-link-box {
-    font-family: monospace; background: #0a1628; border: 1px solid #2a5080;
+    font-family: monospace; background: #0d2b1a; border: 1px solid #2a6040;
     padding: 10px 13px; border-radius: 8px; font-size: 0.8rem; color: #7ec8a4;
     margin-bottom: 16px; word-break: break-all; line-height: 1.4;
   }
 </style>
 </head>
 <body>
+
+<!-- Video background (shown on landing/create screen) -->
+<video id="bg-video" autoplay muted loop playsinline
+  style="display:none;position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;opacity:0.35">
+  <source src="202749-918944227_tiny.mp4" type="video/mp4">
+</video>
 
 <!-- Modal overlay -->
 <div id="overlay" class="overlay hidden">
@@ -241,8 +247,12 @@
   <div style="margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <div class="last-updated" id="last-updated-label"></div>
     <button id="share-btn" onclick="shareUrl()" class="btn"
-      style="background:#132840;border:1px solid #2a5080;color:#8aa3be;padding:5px 13px;font-size:0.78rem;display:none">
-      🔗 Share
+      style="background:#112a18;border:1px solid #2a6040;color:#7aaa90;padding:5px 13px;font-size:0.78rem;display:none">
+      🔗 Share League
+    </button>
+    <button id="new-league-btn" onclick="showCreateLeagueOverlay()" class="btn"
+      style="background:transparent;border:1px solid #f0c040;color:#f0c040;padding:5px 13px;font-size:0.78rem">
+      ＋ New League
     </button>
     <div id="edit-mode-indicator" style="display:none"></div>
   </div>
@@ -293,8 +303,11 @@ const WC_GROUPS = {
 
 const STAGE_POINTS = {
   group: { win: 3, draw: 1, loss: 0 },
-  r32:   { win: 3 }, r16: { win: 6 },
-  qf:    { win: 9 }, sf:  { win: 12 }, final: { win: 15 },
+  r32:   { win: 4 },
+  r16:   { win: 4 },
+  qf:    { win: 5 },
+  sf:    { win: 6 },
+  final: { win: 8 },
 };
 const STAGE_LABELS = {
   group:'Group Stage', r32:'Round of 32', r16:'Round of 16',
@@ -304,6 +317,10 @@ const STAGE_LABELS = {
 const DEFAULT_PLAYERS = [
   { id:1, name:'Player 1', color:'#e07a00', teams:[] },
   { id:2, name:'Player 2', color:'#4a6eb5', teams:[] },
+  { id:3, name:'Player 3', color:'#cc1111', teams:[] },
+  { id:4, name:'Player 4', color:'#2a9a4a', teams:[] },
+  { id:5, name:'Player 5', color:'#9a2060', teams:[] },
+  { id:6, name:'Player 6', color:'#b0b0b0', teams:[] },
 ];
 
 // ═══════════════════════════════════════════════════════════════
@@ -424,7 +441,7 @@ function hideOverlay() {
 function showLoadingOverlay(msg) {
   showOverlay(`<div style="text-align:center;padding:20px">
     <div style="font-size:2.5rem;margin-bottom:14px">⚽</div>
-    <div style="color:#c8a84b;font-size:1.05rem;font-weight:600">${msg}</div>
+    <div style="color:#f0c040;font-size:1.05rem;font-weight:600">${msg}</div>
   </div>`);
 }
 function showErrorOverlay(title, msg, showCreate) {
@@ -499,9 +516,11 @@ async function submitCreateLeague() {
   sessionEditMode = true;  // creator gets full edit access immediately
 
   window.location.hash = id;
+  hideBgVideo();
   hideOverlay();
   updateHeaderUI();
   renderAll();
+  showPage('manage');
   showToast('🎉 League created! Share the URL with your friends.');
 }
 
@@ -514,7 +533,7 @@ function showPinModal() {
     <div class="modal-error" id="pin-error"></div>
     <div class="modal-footer">
       <button class="btn" onclick="hideOverlay()"
-        style="background:#132840;border:1px solid #1e3555;color:#8aa3be">Cancel</button>
+        style="background:#112a18;border:1px solid #1e5535;color:#7aaa90">Cancel</button>
       <button class="btn btn-primary" onclick="submitPin()">Unlock</button>
     </div>
   `);
@@ -561,7 +580,7 @@ function updateHeaderUI() {
     if (sessionEditMode) {
       indicator.innerHTML = `<span style="font-size:0.72rem;color:#7ec8a4;background:#0d2418;border:1px solid #1a4a2a;padding:3px 10px;border-radius:20px">✏️ Editing</span>`;
     } else {
-      indicator.innerHTML = `<span style="font-size:0.72rem;color:#6a8aaa;background:#0d1f35;border:1px solid #1e3555;padding:3px 10px;border-radius:20px;cursor:pointer" onclick="showPinModal()">👁 View Only — click to edit</span>`;
+      indicator.innerHTML = `<span style="font-size:0.72rem;color:#6aaa88;background:#0f3020;border:1px solid #1e5535;padding:3px 10px;border-radius:20px;cursor:pointer" onclick="showPinModal()">👁 View Only — click to edit</span>`;
     }
   }
 }
@@ -594,6 +613,7 @@ async function init() {
   const id = window.location.hash.slice(1);
 
   if (!id) {
+    showBgVideo();
     showCreateLeagueOverlay();
     return;
   }
@@ -619,10 +639,14 @@ async function init() {
   state.locked        = d.locked || false;
   sessionEditMode = false;  // start in view-only mode
 
+  hideBgVideo();
   hideOverlay();
   updateHeaderUI();
   renderAll();
 }
+
+function showBgVideo() { document.getElementById('bg-video').style.display = 'block'; }
+function hideBgVideo() { document.getElementById('bg-video').style.display = 'none'; }
 
 // ═══════════════════════════════════════════════════════════════
 // POINTS CALCULATION
@@ -684,20 +708,48 @@ function computeGroupStandings(groupTeams) {
 // ═══════════════════════════════════════════════════════════════
 // RENDER — LEADERBOARD
 // ═══════════════════════════════════════════════════════════════
+function renderWelcome() {
+  return `
+  <div style="background:#0f3020;border:1px solid #1e5535;border-radius:12px;padding:18px 20px;margin-bottom:22px">
+    <div style="font-size:1rem;font-weight:700;color:#f0c040;margin-bottom:10px;letter-spacing:0.5px">⚽ How It Works</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;font-size:0.82rem;color:#7aaa90;line-height:1.6">
+      <div>
+        <div style="color:#e8f0ec;font-weight:600;margin-bottom:4px">🎯 The Draft</div>
+        Each player drafts teams from the 2026 World Cup. You earn points every time one of your teams wins or draws during the tournament.
+      </div>
+      <div>
+        <div style="color:#e8f0ec;font-weight:600;margin-bottom:4px">📊 Scoring</div>
+        <table style="width:100%;border-collapse:collapse">
+          <tr><td style="padding:1px 0">Group stage win</td><td style="text-align:right;color:#f0c040;font-weight:700">+3 pts</td></tr>
+          <tr><td style="padding:1px 0">Group stage draw</td><td style="text-align:right;color:#f0c040;font-weight:700">+1 pt</td></tr>
+          <tr><td style="padding:1px 0">Round of 32 / 16 win</td><td style="text-align:right;color:#f0c040;font-weight:700">+4 pts</td></tr>
+          <tr><td style="padding:1px 0">Quarterfinal win</td><td style="text-align:right;color:#f0c040;font-weight:700">+5 pts</td></tr>
+          <tr><td style="padding:1px 0">Semifinal win</td><td style="text-align:right;color:#f0c040;font-weight:700">+6 pts</td></tr>
+          <tr><td style="padding:1px 0">Final win (Champion)</td><td style="text-align:right;color:#f0c040;font-weight:700">+8 pts</td></tr>
+        </table>
+      </div>
+      <div>
+        <div style="color:#e8f0ec;font-weight:600;margin-bottom:4px">🔄 Updates</div>
+        Leaderboards update automatically the morning after matches are played. Check back after a match day to see fresh standings. Share your league link with anyone — they can view freely without a PIN.
+      </div>
+    </div>
+  </div>`;
+}
+
 function renderLeaderboard() {
   const sorted = [...state.players]
     .map(p => ({ ...p, total: getPlayerPoints(p) }))
     .sort((a,b) => b.total - a.total);
 
-  let html = `<h2 class="section-title" style="margin-bottom:16px">Standings</h2>
+  let html = renderWelcome() + `<h2 class="section-title" style="margin-bottom:16px">Standings</h2>
     <table class="standings-table">
       <thead><tr><th>Rank</th><th>Player</th><th>Teams</th><th style="text-align:right">Pts</th></tr></thead><tbody>`;
   sorted.forEach((p,i) => {
     const cls = i<3 ? `rank-${i+1}` : 'rank-other';
     html += `<tr><td><span class="rank-badge ${cls}">${i+1}</span></td>
       <td><strong>${p.name}</strong></td>
-      <td style="color:#6a8aaa;font-size:0.78rem">${p.teams.filter(t=>t).join(', ')}</td>
-      <td style="text-align:right;font-size:1.05rem;font-weight:800;color:#c8a84b">${p.total}</td></tr>`;
+      <td style="color:#6aaa88;font-size:0.78rem">${p.teams.filter(t=>t).join(', ')}</td>
+      <td style="text-align:right;font-size:1.05rem;font-weight:800;color:#f0c040">${p.total}</td></tr>`;
   });
   html += `</tbody></table>
     <h2 class="section-title" style="margin-bottom:14px">Player Cards</h2>
@@ -724,7 +776,7 @@ function renderLeaderboard() {
 // RENDER — DRAFT BOARD
 // ═══════════════════════════════════════════════════════════════
 function renderDraftBoard() {
-  let html = `<h2 class="section-title" style="margin-bottom:14px">Draft Board</h2><div class="draft-grid">`;
+  let html = `<div class="draft-grid">`;
   for (const p of state.players) {
     html += `<div class="draft-col">
       <div class="draft-col-header" style="background:${p.color}33;color:${p.color}">${p.name}</div>`;
@@ -732,7 +784,7 @@ function renderDraftBoard() {
       const pts = t ? getTeamPoints(t) : 0;
       html += `<div class="draft-pick">
         <span class="pick-num">${i+1}</span>
-        <span style="flex:1">${t||'<em style="color:#334455">—</em>'}</span>
+        <span style="flex:1">${t||'<em style="color:#2a4535">—</em>'}</span>
         ${t?`<span class="pick-pts ${pts===0?'zero':''}">${pts>0?pts+'pt':''}</span>`:''}
       </div>`;
     });
@@ -777,9 +829,9 @@ function renderTournament() {
       html += `</tbody></table></div>`;
     }
     html += `</div>
-      <div style="margin-top:12px;font-size:0.75rem;color:#6a8aaa">
+      <div style="margin-top:12px;font-size:0.75rem;color:#6aaa88">
         <span style="color:#7ec8a4">✓ green</span> = auto-qualify (top 2) &nbsp;|&nbsp;
-        <span style="color:#c8a84b">yellow</span> = potential best 3rd place &nbsp;|&nbsp;
+        <span style="color:#f0c040">yellow</span> = potential best 3rd place &nbsp;|&nbsp;
         colored dots = drafted player
       </div>`;
   } else {
@@ -843,7 +895,7 @@ function renderBracket() {
     html += `</div></div>`;
   });
   html += `</div></div>
-    <div style="margin-top:10px;font-size:0.75rem;color:#6a8aaa">
+    <div style="margin-top:10px;font-size:0.75rem;color:#6aaa88">
       Bracket fills automatically as results are entered. Colored dots = drafted player.
     </div>`;
   return html;
@@ -986,17 +1038,17 @@ function renderManage() {
   let lockBtn;
   if (!sessionEditMode) {
     lockBtn = `<button class="btn" onclick="showPinModal()"
-      style="background:#1a3a5c;border:1px solid #4a8aaa;color:#8aa3be;display:flex;align-items:center;gap:6px">
+      style="background:#1a4a2e;border:1px solid #4a8aaa;color:#7aaa90;display:flex;align-items:center;gap:6px">
       ✏️ Enter Edit Mode
     </button>`;
   } else if (state.locked) {
     lockBtn = `<button class="btn" onclick="toggleDraftLock()"
-      style="background:#1a3a5c;border:1px solid #c8a84b;color:#c8a84b;display:flex;align-items:center;gap:6px">
+      style="background:#1a4a2e;border:1px solid #f0c040;color:#f0c040;display:flex;align-items:center;gap:6px">
       🔓 Unlock Draft
     </button>`;
   } else {
     lockBtn = `<button class="btn" onclick="toggleDraftLock()"
-      style="background:#1a3a5c;border:1px solid #6a8aaa;color:#8aa3be;display:flex;align-items:center;gap:6px">
+      style="background:#1a4a2e;border:1px solid #6aaa88;color:#7aaa90;display:flex;align-items:center;gap:6px">
       🔒 Lock Draft
     </button>`;
   }
@@ -1006,8 +1058,8 @@ function renderManage() {
   if (!sessionEditMode) {
     tipHtml = '👁 <strong>View-only mode.</strong> Click "Enter Edit Mode" and enter the PIN to make changes.';
   } else if (state.locked) {
-    tipHtml = '🔒 <strong style="color:#c8a84b">Draft is locked.</strong> Teams are set — click Unlock Draft to make changes.';
-    tipStyle = 'border-color:#c8a84b;background:#1a2a18';
+    tipHtml = '🔒 <strong style="color:#f0c040">Draft is locked.</strong> Teams are set — click Unlock Draft to make changes.';
+    tipStyle = 'border-color:#f0c040;background:#1a2a18';
   } else {
     tipHtml = 'Drag countries onto a player\'s column to assign them. Drag back to the pool to unassign. Lock when your draft is final.';
   }
@@ -1055,7 +1107,7 @@ function renderManage() {
   }).join('');
 
   // ── Pool ────────────────────────────────────────────────────
-  const emptyMsg = `<span style="color:#445566;font-size:0.82rem">All teams drafted!</span>`;
+  const emptyMsg = `<span style="color:#3a5540;font-size:0.82rem">All teams drafted!</span>`;
   const poolHtml = unselected.length === 0 ? emptyMsg :
     unselected.map(t => locked
       ? `<div class="pool-chip" style="cursor:default;opacity:0.5"><span>${t}</span><span class="pool-odds">${oddsLabel(t)}</span></div>`
@@ -1079,7 +1131,7 @@ function renderManage() {
     <div class="pool-section">
       <div class="pool-header">
         <h2 class="section-title" style="margin:0">Unselected (${unselected.length})</h2>
-        <span style="font-size:0.75rem;color:#6a8aaa">sorted by win odds</span>
+        <span style="font-size:0.75rem;color:#6aaa88">sorted by win odds</span>
       </div>
       <div class="pool-grid" id="pool-grid"
         ${locked?'':`ondragover="onPoolDragOver(event)" ondragleave="onPoolDragLeave(event)" ondrop="onPoolDrop(event)"`}>
