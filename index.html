@@ -742,10 +742,28 @@ function computeGroupStandings(groupTeams) {
 // ═══════════════════════════════════════════════════════════════
 // RENDER — LEADERBOARD
 // ═══════════════════════════════════════════════════════════════
-function renderWelcome() {
+let howItWorksCollapsed = false;
+function toggleHowItWorks() {
+  howItWorksCollapsed = !howItWorksCollapsed;
+  renderLeaderboard();
+}
+
+function renderWelcome(showToggle = false) {
+  const toggleBtn = showToggle
+    ? `<button onclick="toggleHowItWorks()" style="background:none;border:none;color:#7aaa90;font-size:0.78rem;cursor:pointer;padding:0;margin-left:auto">
+        ${howItWorksCollapsed ? '▶ Show' : '▼ Hide'}
+       </button>`
+    : '';
+  if (showToggle && howItWorksCollapsed) {
+    return `
+    <div style="background:#0f3020;border:1px solid #1e5535;border-radius:12px;padding:14px 20px;margin-bottom:22px;display:flex;align-items:center;gap:10px">
+      <div style="font-size:1rem;font-weight:700;color:#f0c040;letter-spacing:0.5px">⚽ How It Works</div>
+      ${toggleBtn}
+    </div>`;
+  }
   return `
   <div style="background:#0f3020;border:1px solid #1e5535;border-radius:12px;padding:18px 20px;margin-bottom:22px">
-    <div style="font-size:1rem;font-weight:700;color:#f0c040;margin-bottom:10px;letter-spacing:0.5px">⚽ How It Works</div>
+    <div style="font-size:1rem;font-weight:700;color:#f0c040;margin-bottom:10px;letter-spacing:0.5px;display:flex;align-items:center">⚽ How It Works ${toggleBtn}</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;font-size:0.82rem;color:#7aaa90;line-height:1.6">
       <div>
         <div style="color:#e8f0ec;font-weight:600;margin-bottom:4px">🎯 How to Play</div>
@@ -775,7 +793,7 @@ function renderLeaderboard() {
     .map(p => ({ ...p, total: getPlayerPoints(p) }))
     .sort((a,b) => b.total - a.total);
 
-  let html = renderWelcome() + `<h2 class="section-title" style="margin-bottom:16px">Standings</h2>
+  let html = renderWelcome(true) + `<h2 class="section-title" style="margin-bottom:16px">Standings</h2>
     <table class="standings-table">
       <thead><tr><th>Rank</th><th>Player</th><th>Teams</th><th style="text-align:right">Pts</th></tr></thead><tbody>`;
   sorted.forEach((p,i) => {
