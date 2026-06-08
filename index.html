@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>World Cup Fantasy Draft 2026</title>
+<meta name="description" content="Free World Cup 2026 fantasy draft app. Create a league, draft teams, and compete with friends as the tournament unfolds. No account needed.">
+<meta property="og:title" content="⚽ World Cup Fantasy Draft 2026">
+<meta property="og:description" content="Create a league, draft World Cup teams, and compete with friends. Free, no account needed — just share a link.">
+<meta property="og:image" content="https://wc-tourney.netlify.app/bg.jpg">
+<meta property="og:url" content="https://wc-tourney.netlify.app/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="⚽ World Cup Fantasy Draft 2026">
+<meta name="twitter:description" content="Create a league, draft World Cup teams, and compete with friends. Free, no account needed.">
+<meta name="twitter:image" content="https://wc-tourney.netlify.app/bg.jpg">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', Arial, sans-serif; background: #0d2b1a; color: #e8f0ec; min-height: 100vh; }
@@ -363,6 +373,9 @@ let state = {
 let sessionEditMode = false;  // true after correct PIN entered
 let saveDebounceTimer = null;
 
+function escapeHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 function canEdit()       { return sessionEditMode && !state.locked; }
 function isDraftLocked() { return !canEdit(); }  // backwards compat
 
@@ -427,12 +440,18 @@ function saveData() {
   clearTimeout(saveDebounceTimer);
   saveDebounceTimer = setTimeout(async () => {
     if (!state.leagueId) return;
-    await sbFetch(`/leagues?id=eq.${state.leagueId}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        data: { players: state.players, manualMatches: state.manualMatches, locked: state.locked }
-      })
-    });
+    try {
+      const res = await sbFetch(`/leagues?id=eq.${state.leagueId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          data: { players: state.players, manualMatches: state.manualMatches, locked: state.locked }
+        })
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    } catch(e) {
+      showToast('⚠️ Save failed — check your connection and try again');
+      console.error('saveData failed:', e);
+    }
   }, 800);
 }
 
@@ -742,9 +761,10 @@ function computeGroupStandings(groupTeams) {
 // ═══════════════════════════════════════════════════════════════
 // RENDER — LEADERBOARD
 // ═══════════════════════════════════════════════════════════════
-let howItWorksCollapsed = false;
+let howItWorksCollapsed = localStorage.getItem('wc26_hiw_collapsed') === 'true';
 function toggleHowItWorks() {
   howItWorksCollapsed = !howItWorksCollapsed;
+  localStorage.setItem('wc26_hiw_collapsed', howItWorksCollapsed);
   renderLeaderboard();
 }
 
@@ -799,7 +819,7 @@ function renderLeaderboard() {
   sorted.forEach((p,i) => {
     const cls = i<3 ? `rank-${i+1}` : 'rank-other';
     html += `<tr><td><span class="rank-badge ${cls}">${i+1}</span></td>
-      <td><strong>${p.name}</strong></td>
+      <td><strong>${escapeHtml(p.name)}</strong></td>
       <td style="color:#6aaa88;font-size:0.78rem">${p.teams.filter(t=>t).join(', ')}</td>
       <td style="text-align:right;font-size:1.05rem;font-weight:800;color:#f0c040">${p.total}</td></tr>`;
   });
@@ -809,7 +829,7 @@ function renderLeaderboard() {
   sorted.forEach(p => {
     html += `<div class="player-card">
       <div class="player-card-header" style="background:${p.color}22;border-bottom:2px solid ${p.color}">
-        <div><div class="player-name" style="color:${p.color}">${p.name}</div>
+        <div><div class="player-name" style="color:${p.color}">${escapeHtml(p.name)}</div>
         <div class="player-pts-label">total pts</div></div>
         <div class="player-points">${p.total}</div>
       </div><div class="player-teams-list">`;
@@ -831,7 +851,7 @@ function renderDraftBoard() {
   let html = `<div class="draft-grid">`;
   for (const p of state.players) {
     html += `<div class="draft-col">
-      <div class="draft-col-header" style="background:${p.color}33;color:${p.color}">${p.name}</div>`;
+      <div class="draft-col-header" style="background:${p.color}33;color:${p.color}">${escapeHtml(p.name)}</div>`;
     p.teams.forEach((t,i) => {
       const pts = t ? getTeamPoints(t) : 0;
       html += `<div class="draft-pick">
@@ -1150,7 +1170,7 @@ function renderManage() {
   const settingsHtml = state.players.map((p,pi) => `
     <div class="player-setting-pill" style="${locked?'opacity:0.6;pointer-events:none':''}">
       <input type="color" value="${p.color}" ${locked?'disabled':''} onchange="updatePlayerColor(${pi},this.value)" title="Color"/>
-      <input type="text" value="${p.name}" ${locked?'readonly':''} onchange="updatePlayerName(${pi},this.value)" title="Name"
+      <input type="text" value="${escapeHtml(p.name)}" ${locked?'readonly':''} onchange="updatePlayerName(${pi},this.value)" title="Name"
         style="${locked?'cursor:default':''}"/>
       <span class="player-count-badge">${p.teams.filter(t=>t).length}🌍</span>
       ${locked?'':`<button class="btn btn-danger" style="padding:2px 7px;font-size:0.7rem" onclick="removePlayer(${pi})" title="Remove">✕</button>`}
@@ -1181,7 +1201,7 @@ function renderManage() {
         ${locked?'':`ondragover="onColDragOver(event,${pi})" ondragleave="onColDragLeave(event,${pi})" ondrop="onColDrop(event,${pi})" onclick="tapAssignToPlayer(${pi})"`}>
         <div class="draft-player-header" style="background:${p.color}22; border-color:${p.color}55">
           <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${p.color};flex-shrink:0"></span>
-          <span style="font-weight:700;font-size:0.88rem;color:${p.color}">${p.name}</span>
+          <span style="font-weight:700;font-size:0.88rem;color:${p.color}">${escapeHtml(p.name)}</span>
           <span class="player-count-badge">${picks.length}</span>
         </div>
         <div class="draft-player-body">
