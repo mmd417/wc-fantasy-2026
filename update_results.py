@@ -211,6 +211,9 @@ def main():
     for m in matches:
         print(f"    {m['teamA']} {m['scoreA']}–{m['scoreB']} {m['teamB']}  [{m['stage']}]")
 
+    print("Syncing with remote...")
+    git_sync_remote()
+
     print("Updating worldcup_data.js...")
     update_file(matches)
 
