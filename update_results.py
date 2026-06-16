@@ -4,8 +4,8 @@
 Fetches scores from ESPN's public API and writes worldcup_data.js,
 then commits and pushes to GitHub to trigger a Netlify redeploy.
 
-No API key required. Run manually or via cron:
-  0 6 * * * /usr/bin/python3 /path/to/update_results.py
+No API key required. Run manually or via launchd:
+  launchctl start com.mmd417.wc-results-updater
 """
 
 import json
@@ -42,23 +42,24 @@ SLUG_TO_STAGE = {
 }
 
 # ESPN display name → exact app spelling
-# Add entries here if ESPN uses a different name than our app
 TEAM_NAME_MAP = {
     # Group A
-    "Czech Republic":       "Czechia",
-    "Korea Republic":       "South Korea",
-    "Republic of Korea":    "South Korea",
+    "Czech Republic":        "Czechia",
+    "Korea Republic":        "South Korea",
+    "Republic of Korea":     "South Korea",
     # Group B
-    "Bosnia-Herzegovina":   "Bosnia and Herzegovina",
+    "Bosnia-Herzegovina":    "Bosnia and Herzegovina",
+    "Bosnia & Herzegovina":  "Bosnia and Herzegovina",
     # Group D
-    "Turkey":               "Turkiye",
-    "Türkiye":              "Turkiye",
+    "United States":         "USA",
+    "Turkey":                "Turkiye",
+    "Türkiye":               "Turkiye",
     # Group E
-    "Cote d'Ivoire":        "Ivory Coast",
-    "Côte d'Ivoire":        "Ivory Coast",
+    "Curaçao":               "Curacao",
+    "Cote d'Ivoire":         "Ivory Coast",
+    "Côte d'Ivoire":         "Ivory Coast",
     # Group H
-    "Cabo Verde":           "Cape Verde",
-    # passthrough — ESPN already matches our spelling for most teams
+    "Cabo Verde":            "Cape Verde",
 }
 
 def normalize(name: str) -> str:
@@ -67,8 +68,7 @@ def normalize(name: str) -> str:
 # ── ESPN fetch ───────────────────────────────────────────────────────────────
 
 def fetch_day(date: datetime) -> list[dict]:
-    """Return list of completed match dicts for a single calendar date."""
-    ds = date.strftime("%Y%m%d")
+    ds  = date.strftime("%Y%m%d")
     url = f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates={ds}"
     try:
         with urlopen(url, timeout=15) as r:
@@ -82,47 +82,36 @@ def fetch_day(date: datetime) -> list[dict]:
         comp   = event["competitions"][0]
         status = comp["status"]["type"]["name"]
         if status != "STATUS_FULL_TIME":
-            continue  # skip in-progress or scheduled
+            continue
 
         slug  = event.get("season", {}).get("slug", "group-stage")
         stage = SLUG_TO_STAGE.get(slug, "group")
 
         competitors = comp["competitors"]
-        # ESPN puts home team second, away team first — but scores are reliable
         teamA = normalize(competitors[0]["team"]["displayName"])
         teamB = normalize(competitors[1]["team"]["displayName"])
         try:
             scoreA = int(competitors[0]["score"])
             scoreB = int(competitors[1]["score"])
         except (KeyError, ValueError):
-            continue  # skip if score missing
+            continue
 
-        matches.append({
-            "stage":  stage,
-            "teamA":  teamA,
-            "teamB":  teamB,
-            "scoreA": scoreA,
-            "scoreB": scoreB,
-        })
+        matches.append({"stage": stage, "teamA": teamA, "teamB": teamB,
+                        "scoreA": scoreA, "scoreB": scoreB})
     return matches
 
 def fetch_all_results() -> list[dict]:
-    """Fetch all completed matches across the tournament date range."""
     today = datetime.now()
     end   = min(TOURNAMENT_END, today)
-    all_matches = []
-    seen = set()
-
+    all_matches, seen = [], set()
     current = TOURNAMENT_START
     while current <= end:
-        day_matches = fetch_day(current)
-        for m in day_matches:
+        for m in fetch_day(current):
             key = (m["teamA"], m["teamB"])
             if key not in seen:
                 seen.add(key)
                 all_matches.append(m)
         current += timedelta(days=1)
-
     return all_matches
 
 # ── File update ──────────────────────────────────────────────────────────────
@@ -142,63 +131,55 @@ def build_match_js(matches: list[dict]) -> str:
 def update_file(matches: list[dict]) -> None:
     now_utc = datetime.now(timezone.utc)
     iso_ts  = now_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
-    # Human label in CT (UTC-5 standard / UTC-6 CDT; use UTC-5 for simplicity)
     ct_time = now_utc - timedelta(hours=5)
-    human   = ct_time.strftime("Updated %B %-d, %Y %-I:%M%p CT").replace("AM","am").replace("PM","pm")
+    human   = ct_time.strftime("Updated %B %-d, %Y %-I:%M%p CT").replace("AM", "am").replace("PM", "pm")
 
     with open(DATA_FILE, "r") as f:
         content = f.read()
 
-    # Replace LAST_UPDATED block
-    ts_block = (
-        f"// LAST_UPDATED_START\n"
-        f'window.WC_LAST_UPDATED = "{human}";\n'
-        f'window.WC_LAST_VERIFIED_AT = "{iso_ts}";\n'
-        f"// LAST_UPDATED_END"
-    )
     content = re.sub(
         r"// LAST_UPDATED_START.*?// LAST_UPDATED_END",
-        ts_block,
-        content,
-        flags=re.DOTALL,
-    )
-
-    # Replace MATCH_DATA block
-    match_block = (
-        f"// MATCH_DATA_START\n"
-        f"{build_match_js(matches)}\n"
-        f"// MATCH_DATA_END"
+        f"// LAST_UPDATED_START\nwindow.WC_LAST_UPDATED = \"{human}\";\n"
+        f"window.WC_LAST_VERIFIED_AT = \"{iso_ts}\";\n// LAST_UPDATED_END",
+        content, flags=re.DOTALL,
     )
     content = re.sub(
         r"// MATCH_DATA_START.*?// MATCH_DATA_END",
-        match_block,
-        content,
-        flags=re.DOTALL,
+        f"// MATCH_DATA_START\n{build_match_js(matches)}\n// MATCH_DATA_END",
+        content, flags=re.DOTALL,
     )
 
     with open(DATA_FILE, "w") as f:
         f.write(content)
-
     print(f"  Wrote {DATA_FILE}")
 
 # ── Git push ─────────────────────────────────────────────────────────────────
 
 def git_push() -> bool:
     today = datetime.now().strftime("%Y-%m-%d")
-    cmds = [
+
+    # Pull remote changes first to avoid divergence conflicts
+    pull = subprocess.run(
+        ["git", "-C", SCRIPT_DIR, "pull", "--rebase", GIT_REMOTE, "main"],
+        capture_output=True, text=True
+    )
+    if pull.returncode != 0:
+        print(f"  Git pull error: {pull.stderr.strip()}", file=sys.stderr)
+        return False
+
+    for cmd in [
         ["git", "-C", SCRIPT_DIR, "add", "worldcup_data.js"],
         ["git", "-C", SCRIPT_DIR, "commit", "-m", f"results update {today}"],
         ["git", "-C", SCRIPT_DIR, "push", GIT_REMOTE, "main"],
-    ]
-    for cmd in cmds:
+    ]:
         result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode != 0:
-            # "nothing to commit" is fine
             if "nothing to commit" in result.stdout + result.stderr:
                 print("  Git: nothing new to commit.")
                 return True
             print(f"  Git error: {result.stderr.strip()}", file=sys.stderr)
             return False
+
     print("  Git: pushed to GitHub ✓")
     return True
 
@@ -211,15 +192,11 @@ def main():
     for m in matches:
         print(f"    {m['teamA']} {m['scoreA']}–{m['scoreB']} {m['teamB']}  [{m['stage']}]")
 
-    print("Syncing with remote...")
-    git_sync_remote()
-
     print("Updating worldcup_data.js...")
     update_file(matches)
 
     print("Pushing to GitHub...")
-    ok = git_push()
-    if ok:
+    if git_push():
         print("Done! Netlify will redeploy shortly.")
     else:
         print("Push failed — check git output above.", file=sys.stderr)
@@ -228,6 +205,5 @@ def main():
 if __name__ == "__main__":
     if not _GH_TOKEN:
         print("ERROR: GH_WC_TOKEN environment variable not set.", file=sys.stderr)
-        print("  export GH_WC_TOKEN='ghp_...'  (your GitHub PAT)", file=sys.stderr)
         sys.exit(1)
     main()
