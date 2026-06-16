@@ -158,7 +158,9 @@ def update_file(matches: list[dict]) -> None:
 def git_push() -> bool:
     today = datetime.now().strftime("%Y-%m-%d")
 
-    # Pull remote changes first to avoid divergence conflicts
+    # Stage data file, then pull remote changes to avoid divergence conflicts
+    subprocess.run(["git", "-C", SCRIPT_DIR, "add", "worldcup_data.js"],
+                   capture_output=True, text=True)
     pull = subprocess.run(
         ["git", "-C", SCRIPT_DIR, "pull", "--rebase", GIT_REMOTE, "main"],
         capture_output=True, text=True
