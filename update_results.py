@@ -70,11 +70,16 @@ def normalize(name: str) -> str:
 def fetch_day(date: datetime) -> list[dict]:
     ds  = date.strftime("%Y%m%d")
     url = f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates={ds}"
-    try:
-        with urlopen(url, timeout=15) as r:
-            data = json.load(r)
-    except URLError as e:
-        print(f"  WARNING: could not fetch {ds}: {e}", file=sys.stderr)
+    for attempt in range(3):
+        try:
+            with urlopen(url, timeout=15) as r:
+                data = json.load(r)
+            break
+        except Exception as e:
+            if attempt == 2:
+                print(f"  WARNING: could not fetch {ds} after 3 attempts: {e}", file=sys.stderr)
+                return []
+    else:
         return []
 
     matches = []
