@@ -3,8 +3,8 @@
 // Updated daily at 6am by Claude scheduled task
 // ═══════════════════════════════════════════════════════════════
 // LAST_UPDATED_START
-window.WC_LAST_UPDATED = "Updated June 16, 2026 6:00am CT";
-window.WC_LAST_VERIFIED_AT = "2026-06-16T11:00:00Z";
+window.WC_LAST_UPDATED = "Updated June 17, 2026 1:34pm CT";
+window.WC_LAST_VERIFIED_AT = "2026-06-17T18:34:21Z";
 // LAST_UPDATED_END
 
 // MATCH_DATA_START
@@ -18,12 +18,16 @@ window.WC_MATCH_DATA = [
   { stage: "group", teamA: "Haiti", teamB: "Scotland", scoreA: 0, scoreB: 1 },
   { stage: "group", teamA: "Australia", teamB: "Turkiye", scoreA: 2, scoreB: 0 },
   { stage: "group", teamA: "Germany", teamB: "Curacao", scoreA: 7, scoreB: 1 },
-  { stage: "group", teamA: "Ivory Coast", teamB: "Ecuador", scoreA: 1, scoreB: 0 },
   { stage: "group", teamA: "Netherlands", teamB: "Japan", scoreA: 2, scoreB: 2 },
+  { stage: "group", teamA: "Ivory Coast", teamB: "Ecuador", scoreA: 1, scoreB: 0 },
   { stage: "group", teamA: "Sweden", teamB: "Tunisia", scoreA: 5, scoreB: 1 },
-  { stage: "group", teamA: "Belgium", teamB: "Egypt", scoreA: 1, scoreB: 1 },
-  { stage: "group", teamA: "Iran", teamB: "New Zealand", scoreA: 2, scoreB: 2 },
-  { stage: "group", teamA: "Saudi Arabia", teamB: "Uruguay", scoreA: 1, scoreB: 1 },
   { stage: "group", teamA: "Spain", teamB: "Cape Verde", scoreA: 0, scoreB: 0 },
+  { stage: "group", teamA: "Belgium", teamB: "Egypt", scoreA: 1, scoreB: 1 },
+  { stage: "group", teamA: "Saudi Arabia", teamB: "Uruguay", scoreA: 1, scoreB: 1 },
+  { stage: "group", teamA: "Iran", teamB: "New Zealand", scoreA: 2, scoreB: 2 },
+  { stage: "group", teamA: "France", teamB: "Senegal", scoreA: 3, scoreB: 1 },
+  { stage: "group", teamA: "Iraq", teamB: "Norway", scoreA: 1, scoreB: 4 },
+  { stage: "group", teamA: "Argentina", teamB: "Algeria", scoreA: 3, scoreB: 0 },
+  { stage: "group", teamA: "Austria", teamB: "Jordan", scoreA: 3, scoreB: 1 },
 ];
 // MATCH_DATA_END
