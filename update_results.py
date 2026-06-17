@@ -158,22 +158,29 @@ def update_file(matches: list[dict]) -> None:
 def git_push() -> bool:
     today = datetime.now().strftime("%Y-%m-%d")
 
-    # Fetch remote and fast-forward local branch before committing
-    subprocess.run(["git", "-C", SCRIPT_DIR, "fetch", GIT_REMOTE, "main:refs/remotes/origin/main"],
-                   capture_output=True, text=True)
-    subprocess.run(["git", "-C", SCRIPT_DIR, "merge", "--ff-only", "refs/remotes/origin/main"],
-                   capture_output=True, text=True)
-
+    # worldcup_data.js is always recomputed from ESPN — safe to force-push.
+    # Using --force-with-lease is safer than --force: it only overwrites if
+    # no one else pushed since our last fetch, preventing accidental data loss.
     for cmd in [
         ["git", "-C", SCRIPT_DIR, "add", "worldcup_data.js"],
         ["git", "-C", SCRIPT_DIR, "commit", "-m", f"results update {today}"],
-        ["git", "-C", SCRIPT_DIR, "push", GIT_REMOTE, "main"],
+        ["git", "-C", SCRIPT_DIR, "push", "--force-with-lease", GIT_REMOTE, "main"],
     ]:
         result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode != 0:
             if "nothing to commit" in result.stdout + result.stderr:
                 print("  Git: nothing new to commit.")
                 return True
+            # If force-with-lease failed because remote moved ahead, fetch and retry
+            if "rejected" in result.stderr and "--force" in " ".join(cmd):
+                subprocess.run(["git", "-C", SCRIPT_DIR, "fetch", GIT_REMOTE, "main:main"],
+                               capture_output=True, text=True)
+                retry = subprocess.run(
+                    ["git", "-C", SCRIPT_DIR, "push", "--force-with-lease", GIT_REMOTE, "main"],
+                    capture_output=True, text=True
+                )
+                if retry.returncode == 0:
+                    break
             print(f"  Git error: {result.stderr.strip()}", file=sys.stderr)
             return False
 
