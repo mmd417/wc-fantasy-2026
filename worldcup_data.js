@@ -3,47 +3,10 @@
 // Updated daily at 6am by Claude scheduled task
 // ═══════════════════════════════════════════════════════════════
 // LAST_UPDATED_START
-window.WC_LAST_UPDATED = "Updated June 21, 2026 8:03am CT";
-window.WC_LAST_VERIFIED_AT = "2026-06-21T13:03:02Z";
+window.WC_LAST_UPDATED = "Updated June 21, 2026 8:08pm CT";
+window.WC_LAST_VERIFIED_AT = "2026-06-22T01:08:08Z";
 // LAST_UPDATED_END
 
 // MATCH_DATA_START
-window.WC_MATCH_DATA = [
-  { stage: "group", teamA: "Mexico", teamB: "South Africa", scoreA: 2, scoreB: 0 },
-  { stage: "group", teamA: "South Korea", teamB: "Czechia", scoreA: 2, scoreB: 1 },
-  { stage: "group", teamA: "Canada", teamB: "Bosnia and Herzegovina", scoreA: 1, scoreB: 1 },
-  { stage: "group", teamA: "USA", teamB: "Paraguay", scoreA: 4, scoreB: 1 },
-  { stage: "group", teamA: "Qatar", teamB: "Switzerland", scoreA: 1, scoreB: 1 },
-  { stage: "group", teamA: "Brazil", teamB: "Morocco", scoreA: 1, scoreB: 1 },
-  { stage: "group", teamA: "Haiti", teamB: "Scotland", scoreA: 0, scoreB: 1 },
-  { stage: "group", teamA: "Australia", teamB: "Turkiye", scoreA: 2, scoreB: 0 },
-  { stage: "group", teamA: "Germany", teamB: "Curacao", scoreA: 7, scoreB: 1 },
-  { stage: "group", teamA: "Netherlands", teamB: "Japan", scoreA: 2, scoreB: 2 },
-  { stage: "group", teamA: "Ivory Coast", teamB: "Ecuador", scoreA: 1, scoreB: 0 },
-  { stage: "group", teamA: "Sweden", teamB: "Tunisia", scoreA: 5, scoreB: 1 },
-  { stage: "group", teamA: "Spain", teamB: "Cape Verde", scoreA: 0, scoreB: 0 },
-  { stage: "group", teamA: "Belgium", teamB: "Egypt", scoreA: 1, scoreB: 1 },
-  { stage: "group", teamA: "Saudi Arabia", teamB: "Uruguay", scoreA: 1, scoreB: 1 },
-  { stage: "group", teamA: "Iran", teamB: "New Zealand", scoreA: 2, scoreB: 2 },
-  { stage: "group", teamA: "France", teamB: "Senegal", scoreA: 3, scoreB: 1 },
-  { stage: "group", teamA: "Iraq", teamB: "Norway", scoreA: 1, scoreB: 4 },
-  { stage: "group", teamA: "Argentina", teamB: "Algeria", scoreA: 3, scoreB: 0 },
-  { stage: "group", teamA: "Austria", teamB: "Jordan", scoreA: 3, scoreB: 1 },
-  { stage: "group", teamA: "Portugal", teamB: "Congo DR", scoreA: 1, scoreB: 1 },
-  { stage: "group", teamA: "England", teamB: "Croatia", scoreA: 4, scoreB: 2 },
-  { stage: "group", teamA: "Ghana", teamB: "Panama", scoreA: 1, scoreB: 0 },
-  { stage: "group", teamA: "Uzbekistan", teamB: "Colombia", scoreA: 1, scoreB: 3 },
-  { stage: "group", teamA: "Czechia", teamB: "South Africa", scoreA: 1, scoreB: 1 },
-  { stage: "group", teamA: "Switzerland", teamB: "Bosnia and Herzegovina", scoreA: 4, scoreB: 1 },
-  { stage: "group", teamA: "Canada", teamB: "Qatar", scoreA: 6, scoreB: 0 },
-  { stage: "group", teamA: "Mexico", teamB: "South Korea", scoreA: 1, scoreB: 0 },
-  { stage: "group", teamA: "USA", teamB: "Australia", scoreA: 2, scoreB: 0 },
-  { stage: "group", teamA: "Scotland", teamB: "Morocco", scoreA: 0, scoreB: 1 },
-  { stage: "group", teamA: "Brazil", teamB: "Haiti", scoreA: 3, scoreB: 0 },
-  { stage: "group", teamA: "Turkiye", teamB: "Paraguay", scoreA: 0, scoreB: 1 },
-  { stage: "group", teamA: "Netherlands", teamB: "Sweden", scoreA: 5, scoreB: 1 },
-  { stage: "group", teamA: "Germany", teamB: "Ivory Coast", scoreA: 2, scoreB: 1 },
-  { stage: "group", teamA: "Ecuador", teamB: "Curacao", scoreA: 0, scoreB: 0 },
-  { stage: "group", teamA: "Tunisia", teamB: "Japan", scoreA: 0, scoreB: 4 },
-];
+window.WC_MATCH_DATA = [];
 // MATCH_DATA_END
