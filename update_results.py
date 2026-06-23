@@ -101,7 +101,12 @@ def fetch_day(date: datetime) -> list[dict]:
         except (KeyError, ValueError):
             continue
 
-        matches.append({"stage": stage, "teamA": teamA, "teamB": teamB,
+        # Date in YYYY-MM-DD format (UTC)
+        raw_date = event.get("date", "")
+        match_date = raw_date[:10] if raw_date else date.strftime("%Y-%m-%d")
+
+        matches.append({"stage": stage, "date": match_date,
+                        "teamA": teamA, "teamB": teamB,
                         "scoreA": scoreA, "scoreB": scoreB})
     return matches
 
@@ -127,7 +132,8 @@ def build_match_js(matches: list[dict]) -> str:
     lines = ["window.WC_MATCH_DATA = ["]
     for m in matches:
         lines.append(
-            f'  {{ stage: "{m["stage"]}", teamA: "{m["teamA"]}", teamB: "{m["teamB"]}", '
+            f'  {{ stage: "{m["stage"]}", date: "{m.get("date","")}", '
+            f'teamA: "{m["teamA"]}", teamB: "{m["teamB"]}", '
             f'scoreA: {m["scoreA"]}, scoreB: {m["scoreB"]} }},'
         )
     lines.append("];")
