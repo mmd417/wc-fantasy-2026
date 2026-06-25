@@ -3,8 +3,8 @@
 // Updated daily at 6am by Claude scheduled task
 // ═══════════════════════════════════════════════════════════════
 // LAST_UPDATED_START
-window.WC_LAST_UPDATED = "Updated June 24, 2026 8:00am CT";
-window.WC_LAST_VERIFIED_AT = "2026-06-24T13:00:54Z";
+window.WC_LAST_UPDATED = "Updated June 24, 2026 8:00pm CT";
+window.WC_LAST_VERIFIED_AT = "2026-06-25T01:00:08Z";
 // LAST_UPDATED_END
 
 // MATCH_DATA_START
@@ -57,5 +57,9 @@ window.WC_MATCH_DATA = [
   { stage: "group", date: "2026-06-23", teamA: "England", teamB: "Ghana", scoreA: 0, scoreB: 0 },
   { stage: "group", date: "2026-06-23", teamA: "Panama", teamB: "Croatia", scoreA: 0, scoreB: 1 },
   { stage: "group", date: "2026-06-24", teamA: "Colombia", teamB: "Congo DR", scoreA: 1, scoreB: 0 },
+  { stage: "group", date: "2026-06-24", teamA: "Bosnia and Herzegovina", teamB: "Qatar", scoreA: 3, scoreB: 1 },
+  { stage: "group", date: "2026-06-24", teamA: "Switzerland", teamB: "Canada", scoreA: 2, scoreB: 1 },
+  { stage: "group", date: "2026-06-24", teamA: "Morocco", teamB: "Haiti", scoreA: 4, scoreB: 2 },
+  { stage: "group", date: "2026-06-24", teamA: "Scotland", teamB: "Brazil", scoreA: 0, scoreB: 3 },
 ];
 // MATCH_DATA_END
