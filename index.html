@@ -1410,7 +1410,7 @@ function renderHistory() {
       <h2 class="section-title" style="margin-bottom:4px">📈 Standings Over Time</h2>
       <p style="font-size:0.78rem;color:#6aaa88;margin-bottom:18px">Rank after each match day — 1st place at top</p>
       <div style="background:#0f3020;border:1px solid #1e5535;border-radius:12px;padding:18px;max-width:860px;margin:0 auto">
-        <canvas id="history-chart" height="180"></canvas>
+        <canvas id="history-chart"></canvas>
       </div>
       <div style="margin-top:16px;background:#0f3020;border:1px solid #1e5535;border-radius:12px;overflow:hidden">
         <table style="width:100%;border-collapse:collapse;font-size:0.82rem">
@@ -1437,11 +1437,13 @@ function renderHistory() {
   if (historyChartInstance) { historyChartInstance.destroy(); historyChartInstance = null; }
 
   const ctx = document.getElementById('history-chart').getContext('2d');
+  const isMobile = window.innerWidth < 600;
   historyChartInstance = new Chart(ctx, {
     type: 'line',
     data: { labels, datasets },
     options: {
       responsive: true,
+      aspectRatio: isMobile ? 1.2 : 2.8,
       scales: {
         y: {
           reverse: true,
