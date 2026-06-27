@@ -3,8 +3,8 @@
 // Updated daily at 6am by Claude scheduled task
 // ═══════════════════════════════════════════════════════════════
 // LAST_UPDATED_START
-window.WC_LAST_UPDATED = "Updated June 26, 2026 8:15pm CT";
-window.WC_LAST_VERIFIED_AT = "2026-06-27T01:15:57Z";
+window.WC_LAST_UPDATED = "Updated June 27, 2026 1:11am CT";
+window.WC_LAST_VERIFIED_AT = "2026-06-27T06:11:12Z";
 // LAST_UPDATED_END
 
 // MATCH_DATA_START
