@@ -197,6 +197,10 @@ def main():
     for m in matches:
         print(f"    {m['teamA']} {m['scoreA']}–{m['scoreB']} {m['teamB']}  [{m['stage']}]")
 
+    if not matches:
+        print("No completed matches found — skipping update to avoid overwriting data.", file=sys.stderr)
+        sys.exit(0)
+
     print("Updating worldcup_data.js...")
     update_file(matches)
 
