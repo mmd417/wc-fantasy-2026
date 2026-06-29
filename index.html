@@ -53,14 +53,19 @@
   .rank-3 { background: #a0654a; color: #fff; }
   .rank-other { background: #1e5535; color: #7aaa90; }
 
-  .leaderboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
-  .stage-chip { font-size: 0.62rem; background: #1a3a28; border: 1px solid #2a5a3a; color: #7ec8a4; border-radius: 4px; padding: 1px 4px; white-space: nowrap; }
+  .leaderboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
   .player-card { background: #0f3020; border-radius: 10px; overflow: hidden; border: 1px solid #1e5535; }
   .player-card-header { padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
   .player-name { font-weight: 700; font-size: 0.95rem; }
   .player-points { font-size: 1.5rem; font-weight: 800; color: #f0c040; }
   .player-pts-label { font-size: 0.68rem; color: #6aaa88; text-transform: uppercase; }
-  .player-teams-list { padding: 0 14px 10px; }
+  .player-teams-list { padding: 0 10px 10px; }
+  .card-stage-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  .card-stage-table th { color: #6aaa88; font-weight: 600; font-size: 0.65rem; text-transform: uppercase; text-align: right; padding: 4px 4px 2px; border-bottom: 1px solid #1e5535; }
+  .card-stage-table th:first-child { text-align: left; }
+  .card-stage-table td { padding: 3px 4px; border-bottom: 1px solid #0d2418; text-align: right; color: #5a8a6a; }
+  .card-stage-table td:first-child { text-align: left; color: #c8e8d4; }
+  .card-stage-table td.has-pts { color: #f0c040; font-weight: 700; }
   .team-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 0.8rem; border-bottom: 1px solid #112a18; }
   .team-row:last-child { border-bottom: none; }
   .team-pts { font-weight: 600; color: #7ec8a4; font-size: 0.78rem; }
@@ -857,19 +862,22 @@ function renderLeaderboard() {
         <div class="player-pts-label">total pts</div></div>
         <div class="player-points">${p.total}</div>
       </div><div class="player-teams-list">`;
-    const stageLabel = { group:'GS', r32:'R32', r16:'R16', qf:'QF', sf:'SF', final:'F' };
+    const STAGES = ['group','r32','r16','qf','sf','final'];
+    const STAGE_HDR = { group:'GS', r32:'R32', r16:'R16', qf:'QF', sf:'SF', final:'F' };
+    // only show columns that have any points across all teams
+    const activeStages = STAGES.filter(s => p.teams.filter(t=>t).some(t => getTeamPointsByStage(t)[s]));
+    html += `<table class="card-stage-table"><thead><tr>
+      <th>Team</th>${activeStages.map(s=>`<th>${STAGE_HDR[s]}</th>`).join('')}<th>Total</th>
+    </tr></thead><tbody>`;
     p.teams.filter(t=>t).forEach(t => {
       const pts = getTeamPoints(t);
       const byStage = getTeamPointsByStage(t);
-      const breakdown = Object.entries(byStage)
-        .map(([s,p]) => `<span class="stage-chip">${stageLabel[s]||s} +${p}</span>`)
-        .join('');
-      html += `<div class="team-row"><span>${t}</span>
-        <span style="display:flex;align-items:center;gap:4px">
-          ${breakdown}
-          <span class="team-pts ${pts===0?'zero':''}">${pts>0?'+'+pts+'pts':'–'}</span>
-        </span></div>`;
+      html += `<tr><td>${t}</td>${activeStages.map(s => {
+        const v = byStage[s];
+        return v ? `<td class="has-pts">+${v}</td>` : `<td>–</td>`;
+      }).join('')}<td class="${pts>0?'has-pts':''}">${pts>0?'+'+pts:'–'}</td></tr>`;
     });
+    html += `</tbody></table>`;
     html += `</div></div>`;
   });
   html += `</div>`;
