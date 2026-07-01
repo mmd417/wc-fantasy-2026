@@ -1415,23 +1415,16 @@ function renderHistory() {
     return [...cumulativeScores];
   });
 
-  // Compute rank at each date (1 = highest score)
-  const rankByDate = dates.map((_, di) => {
-    const scores = dataByDate[di];
-    const sorted = [...scores].sort((a, b) => b - a);
-    return scores.map(s => sorted.indexOf(s) + 1);
-  });
-
   // Format date labels nicely
   const labels = dates.map(d => {
     const dt = new Date(d + 'T12:00:00');
     return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   });
 
-  // Build chart datasets — one per player
+  // Build chart datasets — one per player, y = cumulative points
   const datasets = players.map((p, pi) => ({
     label: p.name,
-    data: rankByDate.map(ranks => ranks[pi]),
+    data: dataByDate.map(scores => scores[pi]),
     borderColor: p.color,
     backgroundColor: p.color + '22',
     pointBackgroundColor: p.color,
@@ -1444,8 +1437,8 @@ function renderHistory() {
   // Render
   el.innerHTML = `
     <div style="padding:18px 16px 8px">
-      <h2 class="section-title" style="margin-bottom:4px">📈 Standings Over Time</h2>
-      <p style="font-size:0.78rem;color:#6aaa88;margin-bottom:18px">Rank after each match day — 1st place at top</p>
+      <h2 class="section-title" style="margin-bottom:4px">📈 Points Over Time</h2>
+      <p style="font-size:0.78rem;color:#6aaa88;margin-bottom:18px">Cumulative points after each match day</p>
       <div style="background:#0f3020;border:1px solid #1e5535;border-radius:12px;padding:18px;max-width:860px;margin:0 auto">
         <canvas id="history-chart"></canvas>
       </div>
@@ -1459,10 +1452,9 @@ function renderHistory() {
             ${players.map((p, pi) => `
               <tr style="border-top:1px solid #112a18">
                 <td style="padding:9px 14px;font-weight:700;color:${p.color}">${escapeHtml(p.name)}</td>
-                ${rankByDate.map((ranks, di) => {
-                  const rank = ranks[pi];
-                  const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
-                  return `<td style="padding:9px 10px;text-align:center;color:#e8f0ec">${medal}${rank}</td>`;
+                ${dataByDate.map(scores => {
+                  const pts = scores[pi];
+                  return `<td style="padding:9px 10px;text-align:center;color:${pts>0?'#f0c040':'#5a7a6a'}">${pts > 0 ? pts : '–'}</td>`;
                 }).join('')}
               </tr>`).join('')}
           </tbody>
@@ -1483,13 +1475,10 @@ function renderHistory() {
       aspectRatio: isMobile ? 1.2 : 2.8,
       scales: {
         y: {
-          reverse: true,
-          min: 1,
-          max: players.length,
+          min: 0,
           ticks: {
-            stepSize: 1,
             color: '#6aaa88',
-            callback: v => v === 1 ? '1st' : v === 2 ? '2nd' : v === 3 ? '3rd' : `${v}th`,
+            callback: v => `${v}pts`,
           },
           grid: { color: '#1a3a28' },
         },
@@ -1504,12 +1493,7 @@ function renderHistory() {
         },
         tooltip: {
           callbacks: {
-            label: ctx => {
-              const rank = ctx.raw;
-              const pts = dataByDate[ctx.dataIndex][ctx.datasetIndex];
-              const suffix = rank===1?'st':rank===2?'nd':rank===3?'rd':'th';
-              return ` ${ctx.dataset.label}: ${rank}${suffix} place (${pts} pts)`;
-            },
+            label: ctx => ` ${ctx.dataset.label}: ${ctx.raw} pts`,
           },
         },
       },
