@@ -86,7 +86,7 @@ def fetch_day(date: datetime) -> list[dict]:
     for event in data.get("events", []):
         comp   = event["competitions"][0]
         status = comp["status"]["type"]["name"]
-        if status != "STATUS_FULL_TIME":
+        if status not in ("STATUS_FULL_TIME", "STATUS_FINAL_PEN", "STATUS_FINAL_AET"):
             continue
 
         slug  = event.get("season", {}).get("slug", "group-stage")
@@ -100,6 +100,13 @@ def fetch_day(date: datetime) -> list[dict]:
             scoreB = int(competitors[1]["score"])
         except (KeyError, ValueError):
             continue
+
+        # Penalty shootout: regulation score is tied but there's a winner flag
+        if status == "STATUS_FINAL_PEN" and scoreA == scoreB:
+            if competitors[0].get("winner"):
+                scoreA += 1  # artificial +1 so scoring logic sees a winner
+            elif competitors[1].get("winner"):
+                scoreB += 1
 
         # Date in YYYY-MM-DD format (UTC)
         raw_date = event.get("date", "")
