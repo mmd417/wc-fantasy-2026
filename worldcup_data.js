@@ -3,8 +3,8 @@
 // Updated daily at 6am by Claude scheduled task
 // ═══════════════════════════════════════════════════════════════
 // LAST_UPDATED_START
-window.WC_LAST_UPDATED = "Updated July 1, 2026 9:50am CT";
-window.WC_LAST_VERIFIED_AT = "2026-07-01T14:50:31Z";
+window.WC_LAST_UPDATED = "Updated July 1, 2026 12:31pm CT";
+window.WC_LAST_VERIFIED_AT = "2026-07-01T17:31:20Z";
 // LAST_UPDATED_END
 
 // MATCH_DATA_START
@@ -29,7 +29,7 @@ window.WC_MATCH_DATA = [
   { stage: "group", date: "2026-06-16", teamA: "Iraq", teamB: "Norway", scoreA: 1, scoreB: 4 },
   { stage: "group", date: "2026-06-17", teamA: "Argentina", teamB: "Algeria", scoreA: 3, scoreB: 0 },
   { stage: "group", date: "2026-06-17", teamA: "Austria", teamB: "Jordan", scoreA: 3, scoreB: 1 },
-  { stage: "group", date: "2026-06-17", teamA: "Portugal", teamB: "Congo DR", scoreA: 1, scoreB: 1 },
+  { stage: "group", date: "2026-06-17", teamA: "Portugal", teamB: "DR Congo", scoreA: 1, scoreB: 1 },
   { stage: "group", date: "2026-06-17", teamA: "England", teamB: "Croatia", scoreA: 4, scoreB: 2 },
   { stage: "group", date: "2026-06-17", teamA: "Ghana", teamB: "Panama", scoreA: 1, scoreB: 0 },
   { stage: "group", date: "2026-06-18", teamA: "Uzbekistan", teamB: "Colombia", scoreA: 1, scoreB: 3 },
@@ -56,7 +56,7 @@ window.WC_MATCH_DATA = [
   { stage: "group", date: "2026-06-23", teamA: "Portugal", teamB: "Uzbekistan", scoreA: 5, scoreB: 0 },
   { stage: "group", date: "2026-06-23", teamA: "England", teamB: "Ghana", scoreA: 0, scoreB: 0 },
   { stage: "group", date: "2026-06-23", teamA: "Panama", teamB: "Croatia", scoreA: 0, scoreB: 1 },
-  { stage: "group", date: "2026-06-24", teamA: "Colombia", teamB: "Congo DR", scoreA: 1, scoreB: 0 },
+  { stage: "group", date: "2026-06-24", teamA: "Colombia", teamB: "DR Congo", scoreA: 1, scoreB: 0 },
   { stage: "group", date: "2026-06-24", teamA: "Bosnia and Herzegovina", teamB: "Qatar", scoreA: 3, scoreB: 1 },
   { stage: "group", date: "2026-06-24", teamA: "Switzerland", teamB: "Canada", scoreA: 2, scoreB: 1 },
   { stage: "group", date: "2026-06-24", teamA: "Morocco", teamB: "Haiti", scoreA: 4, scoreB: 2 },
@@ -78,7 +78,7 @@ window.WC_MATCH_DATA = [
   { stage: "group", date: "2026-06-27", teamA: "Croatia", teamB: "Ghana", scoreA: 2, scoreB: 1 },
   { stage: "group", date: "2026-06-27", teamA: "Panama", teamB: "England", scoreA: 0, scoreB: 2 },
   { stage: "group", date: "2026-06-27", teamA: "Colombia", teamB: "Portugal", scoreA: 0, scoreB: 0 },
-  { stage: "group", date: "2026-06-27", teamA: "Congo DR", teamB: "Uzbekistan", scoreA: 3, scoreB: 1 },
+  { stage: "group", date: "2026-06-27", teamA: "DR Congo", teamB: "Uzbekistan", scoreA: 3, scoreB: 1 },
   { stage: "group", date: "2026-06-28", teamA: "Algeria", teamB: "Austria", scoreA: 3, scoreB: 3 },
   { stage: "group", date: "2026-06-28", teamA: "Jordan", teamB: "Argentina", scoreA: 1, scoreB: 3 },
   { stage: "r32", date: "2026-06-28", teamA: "South Africa", teamB: "Canada", scoreA: 0, scoreB: 1 },
