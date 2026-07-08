@@ -3,8 +3,8 @@
 // Updated daily at 6am by Claude scheduled task
 // ═══════════════════════════════════════════════════════════════
 // LAST_UPDATED_START
-window.WC_LAST_UPDATED = "Updated July 1, 2026 12:31pm CT";
-window.WC_LAST_VERIFIED_AT = "2026-07-01T17:31:20Z";
+window.WC_LAST_UPDATED = "Updated July 8, 2026 6:04pm CT";
+window.WC_LAST_VERIFIED_AT = "2026-07-08T23:04:21Z";
 // LAST_UPDATED_END
 
 // MATCH_DATA_START
@@ -88,5 +88,22 @@ window.WC_MATCH_DATA = [
   { stage: "r32", date: "2026-06-30", teamA: "Ivory Coast", teamB: "Norway", scoreA: 1, scoreB: 2 },
   { stage: "r32", date: "2026-06-30", teamA: "France", teamB: "Sweden", scoreA: 3, scoreB: 0 },
   { stage: "r32", date: "2026-07-01", teamA: "Mexico", teamB: "Ecuador", scoreA: 2, scoreB: 0 },
+  { stage: "r32", date: "2026-07-01", teamA: "England", teamB: "DR Congo", scoreA: 2, scoreB: 1 },
+  { stage: "r32", date: "2026-07-01", teamA: "Belgium", teamB: "Senegal", scoreA: 3, scoreB: 2 },
+  { stage: "r32", date: "2026-07-02", teamA: "USA", teamB: "Bosnia and Herzegovina", scoreA: 2, scoreB: 0 },
+  { stage: "r32", date: "2026-07-02", teamA: "Spain", teamB: "Austria", scoreA: 3, scoreB: 0 },
+  { stage: "r32", date: "2026-07-02", teamA: "Portugal", teamB: "Croatia", scoreA: 2, scoreB: 1 },
+  { stage: "r32", date: "2026-07-03", teamA: "Switzerland", teamB: "Algeria", scoreA: 2, scoreB: 0 },
+  { stage: "r32", date: "2026-07-03", teamA: "Australia", teamB: "Egypt", scoreA: 1, scoreB: 2 },
+  { stage: "r32", date: "2026-07-03", teamA: "Argentina", teamB: "Cape Verde", scoreA: 3, scoreB: 2 },
+  { stage: "r32", date: "2026-07-04", teamA: "Colombia", teamB: "Ghana", scoreA: 1, scoreB: 0 },
+  { stage: "r16", date: "2026-07-04", teamA: "Canada", teamB: "Morocco", scoreA: 0, scoreB: 3 },
+  { stage: "r16", date: "2026-07-04", teamA: "Paraguay", teamB: "France", scoreA: 0, scoreB: 1 },
+  { stage: "r16", date: "2026-07-05", teamA: "Brazil", teamB: "Norway", scoreA: 1, scoreB: 2 },
+  { stage: "r16", date: "2026-07-06", teamA: "Mexico", teamB: "England", scoreA: 2, scoreB: 3 },
+  { stage: "r16", date: "2026-07-06", teamA: "Portugal", teamB: "Spain", scoreA: 0, scoreB: 1 },
+  { stage: "r16", date: "2026-07-07", teamA: "USA", teamB: "Belgium", scoreA: 1, scoreB: 4 },
+  { stage: "r16", date: "2026-07-07", teamA: "Argentina", teamB: "Egypt", scoreA: 3, scoreB: 2 },
+  { stage: "r16", date: "2026-07-07", teamA: "Switzerland", teamB: "Colombia", scoreA: 1, scoreB: 0 },
 ];
 // MATCH_DATA_END
