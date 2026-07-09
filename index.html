@@ -713,7 +713,8 @@ function hideBgVideo() { document.getElementById('bg-video').style.display = 'no
 // ═══════════════════════════════════════════════════════════════
 // POINTS CALCULATION
 // ═══════════════════════════════════════════════════════════════
-function normalize(t) { return (t||'').trim().toLowerCase(); }
+const NORMALIZE_MAP = { 'congo dr': 'dr congo' };
+function normalize(t) { const s = (t||'').trim().toLowerCase(); return NORMALIZE_MAP[s] || s; }
 function allMatches()  { return [...(window.WC_MATCH_DATA||[]), ...state.manualMatches]; }
 
 function getTeamPoints(teamName) {
@@ -1428,8 +1429,8 @@ function renderHistory() {
     borderColor: p.color,
     backgroundColor: p.color + '22',
     pointBackgroundColor: p.color,
-    pointRadius: 5,
-    pointHoverRadius: 7,
+    pointRadius: 2,
+    pointHoverRadius: 5,
     tension: 0.3,
     fill: false,
   }));
@@ -1483,7 +1484,7 @@ function renderHistory() {
           grid: { color: '#1a3a28' },
         },
         x: {
-          ticks: { color: '#6aaa88' },
+          ticks: { color: '#6aaa88', maxTicksLimit: 10 },
           grid: { color: '#1a3a28' },
         },
       },
